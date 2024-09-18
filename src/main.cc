@@ -58,6 +58,8 @@ i32 main(i32 argc, c8 **argv) {
                     add_if_exists("game.log.json");
                     add_if_exists("signal.log.json");
                     add_if_exists("shuttle.log.json");
+
+                    add_if_exists("round_end_data.html");
                 }
             }
         }
@@ -69,8 +71,12 @@ i32 main(i32 argc, c8 **argv) {
         ScopedStack stack;
         auto p_dir = fs::relative(p, raw_logs);
         auto file_path = parsed_logs / p_dir;
-        file_path.replace_extension("gz");
+        if (file_path.extension() == ".html") {
+            fs::copy_file(p, file_path);
+            continue;
+        }
 
+        file_path.replace_extension("gz");
         std::string_view path_sv(p.native().data(), p.native().size());
         auto json = simdjson::padded_string::load(path_sv);
         if (json.error() != simdjson::error_code::SUCCESS) {
