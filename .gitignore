@@ -1,0 +1,15 @@
+.cache/
+build/
+build-Release/
+build-Debug/
+.vs/
+.vscode/
+out/
+.obsidian/
+.vault/
+.idea/
+*.rdbg
+*.log
+.xmake/
+compile_commands.json
+.luarc.json
