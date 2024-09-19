@@ -56,7 +56,6 @@ i32 main(i32 argc, c8 **argv) {
                     add_if_exists("admin.log.json");
                     add_if_exists("attack.log.json");
                     add_if_exists("game.log.json");
-                    add_if_exists("signal.log.json");
                     add_if_exists("shuttle.log.json");
 
                     add_if_exists("round_end_data.html");
@@ -147,8 +146,7 @@ i32 main(i32 argc, c8 **argv) {
                 case fnv64_c("GAME-OOC"):
                 case fnv64_c("GAME-LOOC"):
                 case fnv64_c("GAME-PRAYER"):
-                case fnv64_c("SHUTTLE"):
-                case fnv64_c("SIGNAL"): {
+                case fnv64_c("SHUTTLE"): {
                     parsed_logs_ptr += format_into(parsed_logs_ptr, "[{}] {}: {}\n", ts.value(), upper_cat, msg_sv);
                     break;
                 }
@@ -165,6 +163,8 @@ i32 main(i32 argc, c8 **argv) {
         auto compressed_log = gzip::compress(parsed_logs_alloc.data(), parsed_log_file_size, Z_BEST_COMPRESSION);
         parsed_log_file.write(compressed_log.data(), compressed_log.size());
         parsed_log_file.close();
+
+        fs::permissions(file_path, fs::perms::owner_all | fs::perms::group_all | fs::perms::others_all, fs::perm_options::add);
     }
 
     return 0;
